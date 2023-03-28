@@ -1,0 +1,16 @@
+global:
+  scrape_interval: 10s # 10초마다 매트릭을 수집 default 1분
+  evaluation_interval: 1m # 1분마다 규칙을 평가 default 1분
+
+scrape_configs:
+  - job_name: prometheus for spring
+    metrics_path: '/actuator/prometheus'
+    static_configs:
+    - targets: ['3.35.180.6:8080']
+
+
+#docker run \
+# -d \
+# -p 9090:9090 \
+# -v {현재 디렉토리 위치}:/etc/prometheus \
+# --name prometheus prom/prometheus
