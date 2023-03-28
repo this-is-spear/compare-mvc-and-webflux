@@ -1,5 +1,6 @@
 package hello.deliveryrequestwebflux;
 
+import java.time.Duration;
 import java.util.UUID;
 
 import org.springframework.http.MediaType;
@@ -24,6 +25,7 @@ public class CodeJudgeController {
 	public Mono<Boolean> executeCode(@RequestBody String code) {
 		String id = UUID.randomUUID().toString();
 		return Mono.fromCallable(() -> codeExecution.execute(id, code))
-			.subscribeOn(Schedulers.boundedElastic());
+			.subscribeOn(Schedulers.boundedElastic())
+			.timeout(Duration.ofSeconds(2));
 	}
 }

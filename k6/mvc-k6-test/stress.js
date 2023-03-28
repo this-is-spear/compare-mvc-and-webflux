@@ -3,25 +3,29 @@ import http from 'k6/http';
 import { check, group, sleep, fail } from 'k6';
 
 export let options = {
+
   stages: [
-    { duration: '5m', target: 2 },
-    { duration: '5m', target: 4 },
-    { duration: '5m', target: 6 },
-    { duration: '5m', target: 6 },
-    { duration: '5m', target: 4 },
-    { duration: '5m', target: 2 }
+    { duration: '1m', target: 4 },
+    { duration: '1m', target: 6 },
+    { duration: '5m', target: 10 },
+    { duration: '5m', target: 20 },
+    { duration: '5m', target: 40 },
+    { duration: '5m', target: 80 },
+    { duration: '5m', target: 120 },
   ],
+
   thresholds: {
     http_req_duration: ['p(99)<600'], // 99% of requests must complete below 1.5s
   },
 };
 
-const BASE_URL = 'http://localhost:8080';
+const BASE_URL = 'http://3.35.180.6:8080';
 const params = {
   headers: {
     'Content-Type': 'application/json',
   },
 };
+
 const data = { code: 'class Solution {\n' +
       '\tpublic int[] solution(int brown, int yellow) {\n' +
       '\t\tfor (int x = 1; x < (brown + 4) / 2; x++) {\n' +
@@ -44,7 +48,7 @@ export default function ()  {
   check(executeCode, {"Execute Code API status check" : (resp) => resp.status === 200});
 
   let requestId = executeCode.body;
-  console.log(requestId)
+  console.log(requestId);
 
   const searchParams = new URLSearchParams([
     ['requestId', requestId],
@@ -54,10 +58,8 @@ export default function ()  {
   check(getResult, {"Get Code Execution Result" : (resp) => resp.status === 200});
 
   while (getResult.body === 'false'){
-    console.log("retry")
+    console.log('retry');
     getResult = http.get(`${BASE_URL}/code?${searchParams.toString()}`);
     sleep(2);
   }
-
-  console.log(getResult.body)
 };

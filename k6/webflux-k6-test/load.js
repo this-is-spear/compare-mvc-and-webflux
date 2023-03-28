@@ -3,25 +3,25 @@ import { check, group, sleep, fail } from 'k6';
 
 export let options = {
   stages: [
-    { duration: '1m', target: 4 },
-    { duration: '1m', target: 6 },
-    { duration: '5m', target: 10 },
-    { duration: '5m', target: 20 },
-    { duration: '5m', target: 40 },
-    { duration: '5m', target: 80 },
-    { duration: '1m', target: 120 },
+    { duration: '5m', target: 2 },
+    { duration: '5m', target: 4 },
+    { duration: '5m', target: 6 },
+    { duration: '5m', target: 6 },
+    { duration: '5m', target: 4 },
+    { duration: '5m', target: 2 }
   ],
   thresholds: {
     http_req_duration: ['p(99)<6500'], // 99% of requests must complete below 1.5s
   },
 };
 
-const BASE_URL = 'http://localhost:8080';
+const BASE_URL = 'http://3.35.180.6:8080';
 const params = {
   headers: {
     'Content-Type': 'application/json',
   },
 };
+
 const data = { code: 'class Solution {\n' +
       '\tpublic int[] solution(int brown, int yellow) {\n' +
       '\t\tfor (int x = 1; x < (brown + 4) / 2; x++) {\n' +

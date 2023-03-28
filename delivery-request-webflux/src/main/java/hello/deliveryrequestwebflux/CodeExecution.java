@@ -16,7 +16,6 @@ public class CodeExecution {
 
 	private final Set<String> tmpStoredCodeResult = new HashSet<>();
 
-	@Synchronized
 	@SneakyThrows
 	@SuppressWarnings("all")
 	public Boolean execute(String requestId, String code) {
@@ -26,7 +25,7 @@ public class CodeExecution {
 		System.out.println(code);
 
 		// 코드가 실행되는 시간을 가정한다.
-		Thread.sleep(5_000);
+		Thread.sleep(1_500);
 
 		tmpStoredCodeResult.add(requestId);
 		log.info("End execution request id is {}", requestId);
